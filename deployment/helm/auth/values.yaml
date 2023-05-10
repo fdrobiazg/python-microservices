@@ -1,0 +1,13 @@
+image: "fdrobiazg/auth:latest"
+port: 5050
+replicas: 2
+
+mysql:
+  host: mysql
+  user: root
+  password: root123
+  db: auth
+  port: 3306
+
+jwt_secret: mysupersecretsecret
+

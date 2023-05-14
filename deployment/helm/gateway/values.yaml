@@ -1,0 +1,15 @@
+repository: "fdrobiazg/gateway"
+replicaCount: 2
+port: 8000
+
+ingress:
+  route: clr2gray.com 
+
+mongo:
+  uri: "mongodb://mongodb:27017/src_images"
+
+rabbitmq:
+  host: "rabbitmq"
+
+auth:
+  svc_address: "auth:5050"

@@ -1,19 +1,27 @@
 import ssl
 import os, gridfs, pika, json
 from flask import Flask, request
-from flask_pymongo import PyMongo
+# from flask_pymongo import PyMongo
+from pymongo import MongoClient
 from auth import validate, access
 from utils import storage
 
+MONGO_USER = os.environ.get("MONGO_USER")
+MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
+RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST")
+
 app = Flask(__name__)
-app.config["Mongo_URI"] = os.environ.get("MONGO_URI")
 
-mongo = PyMongo(app, uri="mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.2")
+mongo = MongoClient(os.environ.get("MONGO_URI"), 
+                    username=MONGO_USER, 
+                    password=MONGO_PASSWORD,
+                    authSource='admin')
 
-gfs = gridfs.GridFS(mongo.db)
+src_gfs = gridfs.GridFS(mongo['src_img'])
+out_gfs = gridfs.GridFS(mongo['processed_img'])
 
-connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq"))
-channel = connection.channel
+connection = pika.BlockingConnection(pika.ConnectionParameters(RABBITMQ_HOST))
+channel = connection.channel()
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -34,8 +42,9 @@ def upload():
         if len(request.files) != 1:
             return "Incorrect number of files - exactly 1 file is required.", 400
         
-        _, file = request.files.items()
-        err = storage.upload(file, gfs, channel, access)
+        file = request.files['file']
+        app.logger.info(f"File: {file}\n\n, Type:{type(file)}")
+        err = storage.upload(file, src_gfs, channel, access)
 
         if err:
             return err
@@ -53,4 +62,4 @@ def health():
     return "Healthy.", 200
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8000, debug=True)

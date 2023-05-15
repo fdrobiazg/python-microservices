@@ -8,11 +8,12 @@ from utils import storage
 
 MONGO_USER = os.environ.get("MONGO_USER")
 MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
+MONGO_URI = os.environ.get("MONGO_URI")
 RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST")
 
 app = Flask(__name__)
 
-mongo = MongoClient(os.environ.get("MONGO_URI"), 
+mongo = MongoClient(MONGO_URI,
                     username=MONGO_USER, 
                     password=MONGO_PASSWORD,
                     authSource='admin')

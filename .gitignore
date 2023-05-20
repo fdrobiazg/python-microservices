@@ -1,2 +1,4 @@
 .vscode
 venv/
+src/processing/utils/__pycache__/__init__.cpython-39.pyc
+src/processing/utils/__pycache__/clr2gray.cpython-39.pyc

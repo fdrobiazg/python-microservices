@@ -15,7 +15,7 @@ def upload(file, gfs, channel, access):
     try:
         channel.basic_publish(
             exchange="",
-            routing_key="image",
+            routing_key="src_images",
             body=json.dumps(message),
             properties=pika.BasicProperties(
                 delivery_mode=pika.spec.PERSISTENT_DELIVERY_MODE

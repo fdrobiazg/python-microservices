@@ -44,7 +44,6 @@ def upload():
             return "Incorrect number of files - exactly 1 file is required.", 400
         
         file = request.files['file']
-        app.logger.info(f"File: {file}\n\n, Type:{type(file)}")
         err = storage.upload(file, src_gfs, channel, access)
 
         if err:

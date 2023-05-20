@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: processing
+  labels:
+    app: processing
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: processing
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 8
+  template:
+    metadata:
+      labels:
+        app: processing
+    spec:
+      containers:
+        - name: processing
+          image: {{ .Values.repository }}
+          envFrom:
+            - configMapRef:
+                name: processing-configmap
+            - secretRef:
+                name: processing-secret

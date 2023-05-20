@@ -1,0 +1,11 @@
+repository: "fdrobiazg/processing:latest"
+replicas: 4
+
+mongo:
+  uri: "mongodb://mongodb:27017"
+  username: root
+  password: root123
+
+rabbitmq:
+  host: rabbitmq
+  queue: src_images

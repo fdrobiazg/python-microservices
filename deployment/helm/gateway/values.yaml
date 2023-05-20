@@ -7,6 +7,8 @@ ingress:
 
 mongo:
   uri: "mongodb://mongodb:27017/src_images"
+  username: root
+  password: root123
 
 rabbitmq:
   host: "rabbitmq"

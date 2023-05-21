@@ -8,7 +8,6 @@ def upload(file, gfs, channel, access):
     
     message = {
         "img_fid": str(res),
-        "processed_img_fid": None,
         "username": access["username"],
     }
 

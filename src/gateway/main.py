@@ -1,10 +1,11 @@
 import ssl
 import os, gridfs, pika, json
-from flask import Flask, request
+from flask import Flask, request, send_file
 # from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from auth import validate, access
 from utils import storage
+from bson.objectid import ObjectId
 
 MONGO_USER = os.environ.get("MONGO_USER")
 MONGO_PASSWORD = os.environ.get("MONGO_PASSWORD")
@@ -55,7 +56,25 @@ def upload():
     
 @app.route("/download", methods=["GET"])
 def download():
-    pass
+    access, err = validate.token(request)
+
+    if err:
+        return err
+    
+    access = json.loads(access)
+
+    if access["admin"]:
+        fid = request.args.get("fid")
+
+        if not fid:
+            return "Fid is required.", 400
+        
+        try:
+            out = out_gfs.get(ObjectId(fid))
+            return send_file(out, download_name=f"{fid}.png")
+        except Exception as err:
+            print(err)
+            return "Internal server error", 500
 
 @app.route("/health", methods=["GET"])
 def health():

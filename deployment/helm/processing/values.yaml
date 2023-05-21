@@ -1,5 +1,5 @@
 repository: "fdrobiazg/processing:latest"
-replicas: 1
+replicas: 4
 
 mongo:
   uri: "mongodb://mongodb:27017"

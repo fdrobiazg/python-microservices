@@ -1,0 +1,46 @@
+auth:
+  image: "fdrobiazg/auth:latest"
+  port: 5050
+  replicas: 2
+
+  mysql:
+    host: mysql
+    user: root
+    password: root123
+    db: auth
+    port: 3306
+
+  jwt_secret: mysupersecretsecret
+
+gateway:
+  repository: "fdrobiazg/gateway"
+  replicaCount: 2
+  port: 8000
+
+  ingress:
+    route: clr2gray.com 
+
+  mongo:
+    uri: "mongodb://mongodb:27017/src_images"
+    username: root
+    password: root123
+
+  rabbitmq:
+    host: "rabbitmq"
+
+  auth:
+    svc_address: "auth:5050"
+
+processing:
+  repository: "fdrobiazg/processing:latest"
+  replicas: 4
+
+  mongo:
+    uri: "mongodb://mongodb:27017"
+    username: root
+    password: root123
+
+  rabbitmq:
+    host: rabbitmq
+    queue: src_images
+

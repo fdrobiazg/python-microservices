@@ -22,7 +22,7 @@ def read_to_cv2(gfs_src, objectid):
 def save(gfs_out, file):
     try:
         res = gfs_out.put(file)
-        print(json.dumps({"info": "Convertion finished"}))
+        print(json.dumps({"info": "Conversion finished"}))
         print(json.dumps({"fid": str(res)}))
     except Exception:
         return f"Failed to save file.", 500

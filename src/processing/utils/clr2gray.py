@@ -3,9 +3,11 @@ from bson.objectid import ObjectId
 import numpy as np
 import cv2
 import tempfile
+import datetime
 
 def convert(message, gfs_src, gfs_out, channel):
-    print(json.dumps({"info": "convert request recived"})) 
+    print(json.dumps({"info": "convert request received",
+                      "time": str(datetime.datetime.utcnow())})) 
     message = json.loads(message)
     img = read_to_cv2(gfs_src, ObjectId(message['img_fid']))
     with tempfile.NamedTemporaryFile(suffix=".png") as tf:
@@ -22,8 +24,9 @@ def read_to_cv2(gfs_src, objectid):
 def save(gfs_out, file):
     try:
         res = gfs_out.put(file)
-        print(json.dumps({"info": "Conversion finished"}))
-        print(json.dumps({"fid": str(res)}))
+        print(json.dumps({"info": "Conversion finished", 
+                          "fid": str(res), 
+                          "time": str(datetime.datetime.utcnow())}))
     except Exception:
         return f"Failed to save file.", 500
 
